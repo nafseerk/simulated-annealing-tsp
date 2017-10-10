@@ -25,7 +25,7 @@ class LogarithmicSchedule(object):
         T(t) = T0 / (1 + αLog(1 + t))
     """
 
-    def __init__(self, alpha=.995, T0=1000000):
+    def __init__(self, alpha=1000, T0=10000):
         self.alpha = alpha
         self.T0 = T0
         self.T = T0
@@ -69,16 +69,18 @@ if __name__ == '__main__':
     plt.scatter(x,y)
     plt.show()
 
-##    #Test Logarithmic schedule
-##    schedule = LogarithmicSchedule()
-##    x = []
-##    y = []  
-##    for stepCount in range(1, 10001):
-##        x.append(stepCount)
-##        y.append(schedule.getTemperature(stepCount))
-##        #print(schedule.getTemperature(stepCount))
-
     #Test Linear schedule
+    schedule = LogarithmicSchedule()
+    x = []
+    y = []  
+    for stepCount in range(1, 50001):
+        x.append(stepCount)
+        y.append(schedule.getTemperature(stepCount))
+
+    plt.scatter(x,y)
+    plt.show()
+
+    #Test Quadratic schedule
     x = []
     y = []
     schedule = QuadraticSchedule()

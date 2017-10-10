@@ -53,58 +53,48 @@ class Problem(object):
 def simulated_annealing(problem, schedule):
     currentState = problem.getInitialState()
     startTime = tm.time()
-    time = 1
     x_time = [0]
     y_cost = [currentState.getValue()]
-    while True:
-        #print('At time %d' % time)
-        currentTemperature = schedule.getTemperature(time)
-        #print('Current temprature = %f' % currentTemperature)
 
-        #TODO: When to stop
+    time = 1
+    while True:
+        currentTemperature = schedule.getTemperature(time)
+
         #Stop when the system is at equilibrium
         if currentTemperature <= problem.getStoppingTemperature():
             problem.setResults(currentState, time, currentTemperature, x_time, y_cost)
             return
 
-        #print('Current state: %s' % currentState.getPath())
-        #print('Current state cost = %f' % currentState.getValue())
         nextState = currentState.getSuccessor()
-        #print('Next state: %s' % nextState.getPath())
-        #print('Next state cost = %f' % nextState.getValue())
         deltaValue = nextState.getValue() - currentState.getValue()
-        #print('deltaValue = %d' % deltaValue)
 
         if deltaValue < 0: #If improvement, then accept the solution  TODO: what to do if deltaValue = 0
             currentState = nextState
-            #print('Better Solution...Accepting')
         elif acceptWithProbabilty(deltaValue, currentTemperature): #If bad solution, then accept with probability
             currentState = nextState
-            #print('Bad Solution...Accepting')
-        else:
-            pass
-            #print('Bad Solution...Not Accepting')
-        #input('Enter to continue...')
+
         x_time.append(time)
         y_cost.append(currentState.getValue())
+        
+        #Stop after 5 minute
         time += 1
-        #Stop after 5 minute    
         currentTime = tm.time()
         if (currentTime - startTime)/60 > 5:
-            print('Terminating after 5 minutes...')
+            print('Ran for 5 minutes. Terminating...')
             break
+
     problem.setResults(currentState, time, currentTemperature, x_time, y_cost)
     return
 
 
 def acceptWithProbabilty(valueChange, temperature):
     probability = math.exp(-valueChange/temperature)
-    #print('P=%.2f' % probability)
     return random.random() < probability
 
 
 if __name__ == '__main__':
-    tspData = TSPData('C:/Users/nkadiyar/Documents/git-repos/simulated-annealing/simulated-annealing-tsp/input-data/problem36');
+    inputFile = 'C:/Users/nkadiyar/Documents/git-repos/simulated-annealing/simulated-annealing-tsp/input-data/problem36'
+    tspData = TSPData(inputFile);
     tspData.summary()
     tspHelper = TSPHelper(tspData, startCity='A')
 
@@ -113,13 +103,16 @@ if __name__ == '__main__':
     print('The start state: %s' % startState.getPath())
     print('The start cost: %.2f' % startState.getValue())
 
-    #TODO: how to set the initial temperature
-    #Create schedule
-    #schedule = ExponentialSchedule()
-    #schedule = LogarithmicSchedule(T0=10000)
-    schedule = QuadraticSchedule()
-    
-    
+    #Create schedule - Choose one of 1. 'Exponential' 2. 'Logarithmic' 3. 'Quadratic' 
+    selectedSchedule = 'Exponential'
+    schedule = None
+    if selectedSchedule == 'Exponential':
+        schedule = ExponentialSchedule()
+    elif selectedSchedule == 'Logarithmic':
+        schedule = LogarithmicSchedule()
+    elif selectedSchedule == 'Quadratic':
+        schedule = QuadraticSchedule()
+        
     #Perform simulated annealing
     problem = Problem(startState)
     simulated_annealing(problem, schedule)
