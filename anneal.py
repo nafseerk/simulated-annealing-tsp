@@ -93,7 +93,7 @@ def acceptWithProbabilty(valueChange, temperature):
 
 
 if __name__ == '__main__':
-    inputFile = 'C:/Users/nkadiyar/Documents/git-repos/simulated-annealing/simulated-annealing-tsp/input-data/problem36'
+    inputFile = 'C:/Users/nkadiyar/Documents/git-repos/annealing/simulated-annealing-tsp/input-data/problem36'
     tspData = TSPData(inputFile);
     tspData.summary()
     tspHelper = TSPHelper(tspData, startCity='A')
@@ -103,14 +103,14 @@ if __name__ == '__main__':
     print('The start state: %s' % startState.getPath())
     print('The start cost: %.2f' % startState.getValue())
 
-    #Create schedule - Choose one of 1. 'Exponential' 2. 'Logarithmic' 3. 'Quadratic' 
-    selectedSchedule = 'Exponential'
+    #Create schedule - Choose one of 1. 'exponential' 2. 'logarithmic' 3. 'quadratic' 
+    selectedSchedule = 'quadratic'
     schedule = None
-    if selectedSchedule == 'Exponential':
+    if selectedSchedule == 'exponential':
         schedule = ExponentialSchedule()
-    elif selectedSchedule == 'Logarithmic':
+    elif selectedSchedule == 'logarithmic':
         schedule = LogarithmicSchedule()
-    elif selectedSchedule == 'Quadratic':
+    elif selectedSchedule == 'quadratic':
         schedule = QuadraticSchedule()
         
     #Perform simulated annealing
@@ -122,4 +122,7 @@ if __name__ == '__main__':
     print('The final cost: %.2f' % finalState.getValue())
     print('Solution found after %d steps and %.2f temperature' % (problem.getTime(), problem.getTemperature()))
     plt.scatter(problem.x_axis, problem.y_axis)
+    plt.xlabel('Time')
+    plt.ylabel('Solution cost')
+    plt.title('Simulated Annealing with ' + selectedSchedule +' schedule')
     plt.show()

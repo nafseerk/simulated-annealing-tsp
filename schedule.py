@@ -39,7 +39,7 @@ class LogarithmicSchedule(object):
         return self.T
 
 class QuadraticSchedule(object):
-    """Uses linear schedule. Reference: http://iopscience.iop.org/article/10.1088/0305-4470/31/41/011/pdf
+    """Uses Quadratic schedule. Modified from Reference: http://iopscience.iop.org/article/10.1088/0305-4470/31/41/011/pdf
         T(t) = T0 * ((maxSteps - stepCount)/maxSteps)^4 
     """
     def __init__(self, alpha=1, T0=2000000, maxSteps = 2000000):
@@ -59,35 +59,46 @@ class QuadraticSchedule(object):
 
     
 if __name__ == '__main__':
-    #Test Exponential schedule
-    schedule = ExponentialSchedule()
-    x = []
-    y = []
-    for stepCount in range(1, 1500001):
-        x.append(stepCount)
-        y.append(schedule.getTemperature(stepCount))
-    plt.scatter(x,y)
-    plt.show()
-
-    #Test Linear schedule
-    schedule = LogarithmicSchedule()
-    x = []
-    y = []  
-    for stepCount in range(1, 50001):
-        x.append(stepCount)
-        y.append(schedule.getTemperature(stepCount))
-
-    plt.scatter(x,y)
-    plt.show()
-
-    #Test Quadratic schedule
-    x = []
-    y = []
-    schedule = QuadraticSchedule()
-    for stepCount in range(1, 2000001):
-        x.append(stepCount)
-        y.append(schedule.getTemperature(stepCount))  
-    plt.scatter(x,y)
-    plt.show()
+    #Choose one of 1. exponential, 2. logarithmic or 3. quadratic
+    testSchedule = 'exponential'
+    if testSchedule == 'exponential':
+        #Test Exponential schedule
+        schedule = ExponentialSchedule()
+        x = []
+        y = []
+        for stepCount in range(1, 1500001):
+            x.append(stepCount)
+            y.append(schedule.getTemperature(stepCount))
+        plt.scatter(x,y)
+        plt.xlabel('Time')
+        plt.ylabel('Temperature')
+        plt.title('Exponential Schedule')
+        plt.show()
+    elif testSchedule == 'logarithmic':
+        #Test Logarithmic schedule
+        schedule = LogarithmicSchedule()
+        x = []
+        y = []  
+        for stepCount in range(1, 50001):
+            x.append(stepCount)
+            y.append(schedule.getTemperature(stepCount))
+        plt.scatter(x,y)
+        plt.xlabel('Time')
+        plt.ylabel('Temperature')
+        plt.title('Logarithmic Schedule')
+        plt.show()
+    elif testSchedule == 'quadratic':
+        #Test Quadratic schedule
+        x = []
+        y = []
+        schedule = QuadraticSchedule()
+        for stepCount in range(1, 2000001):
+            x.append(stepCount)
+            y.append(schedule.getTemperature(stepCount))  
+        plt.scatter(x,y)
+        plt.xlabel('Time')
+        plt.ylabel('Temperature')
+        plt.title('Quadratic Schedule')
+        plt.show()
 
     
